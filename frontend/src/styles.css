@@ -299,3 +299,39 @@ body {
 .MuiAlert-root {
   border-radius: 8px;
 }
+.more-items-indicator {
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #666;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+}
+/* Scroll Indicator */
+.scroll-indicator {
+  height: 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(0, 123, 255, 0.3)
+  );
+  margin-top: -10px; /* Adjust to overlap with the list */
+  border-radius: 0 0 8px 8px;
+}
+/* Favorites Item Actions */
+.favorites-item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.add-to-list-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #28a745; /* Green color for the add button */
+  transition: color 0.2s;
+}
+
+.add-to-list-button:hover {
+  color: #218838; /* Darker green on hover */
+}

@@ -9,6 +9,7 @@ import {
   Heart,
   HeartOff,
   ChevronRight,
+  Plus,
 } from 'lucide-react';
 import './index.css';
 import './styles.css';
@@ -171,6 +172,12 @@ export default function App() {
     setSnackbar({ open: true, message: 'All items added to favorites!' });
   };
 
+  // Function to add a favorite item back to the product list
+  const addFavoriteToProductList = (item) => {
+    setProducts([...products, { ...item, locked: false }]);
+    setSnackbar({ open: true, message: `${item.name} added to your list!` });
+  };
+
   return (
     <div className='app-container'>
       <div className='app-content'>
@@ -200,56 +207,59 @@ export default function App() {
         </div>
 
         {/* Product List */}
-        <div className='product-scroll-container'>
-          <ul className='product-list'>
-            {products.map((p, index) => {
-              const foundDeal = deals.find((d) => {
-                const productName = p.name.toLowerCase().trim();
-                const dealName = d.name.toLowerCase().trim();
-                return dealName === productName;
-              });
-              return (
-                <li key={index} className='product-item'>
-                  <div>
-                    <span className='product-name'>{p.name}</span>
-                    {foundDeal ? (
-                      <span className='product-price'>
-                        - Found at {foundDeal.store} for{' '}
-                        {foundDeal.price || 'N/A'} kr
-                      </span>
-                    ) : (
-                      <span className='product-not-found'>- Not found</span>
-                    )}
-                  </div>
-                  <div className='product-actions'>
-                    <button
-                      onClick={() => toggleLock(index)}
-                      className='lock-button'
-                    >
-                      {p.locked ? <Lock size={20} /> : <Unlock size={20} />}
-                    </button>
-                    <button
-                      onClick={() => deleteProduct(index)}
-                      className='delete-button'
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                    <button
-                      onClick={() => toggleFavorite(index)}
-                      className='favorite-button'
-                    >
-                      {p.isFavorite ? (
-                        <Heart size={20} fill='red' />
+        {products.length > 0 && (
+          <div className='product-scroll-container'>
+            <ul className='product-list'>
+              {products.map((p, index) => {
+                const foundDeal = deals.find((d) => {
+                  const productName = p.name.toLowerCase().trim();
+                  const dealName = d.name.toLowerCase().trim();
+                  return dealName === productName;
+                });
+                return (
+                  <li key={index} className='product-item'>
+                    <div>
+                      <span className='product-name'>{p.name}</span>
+                      {foundDeal ? (
+                        <span className='product-price'>
+                          - Found at {foundDeal.store} for{' '}
+                          {foundDeal.price || 'N/A'} kr
+                        </span>
                       ) : (
-                        <HeartOff size={20} />
+                        <span className='product-not-found'>- Not found</span>
                       )}
-                    </button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+                    </div>
+                    <div className='product-actions'>
+                      <button
+                        onClick={() => toggleLock(index)}
+                        className='lock-button'
+                      >
+                        {p.locked ? <Lock size={20} /> : <Unlock size={20} />}
+                      </button>
+                      <button
+                        onClick={() => deleteProduct(index)}
+                        className='delete-button'
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                      <button
+                        onClick={() => toggleFavorite(index)}
+                        className='favorite-button'
+                      >
+                        {p.isFavorite ? (
+                          <Heart size={20} fill='red' />
+                        ) : (
+                          <HeartOff size={20} />
+                        )}
+                      </button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            {products.length > 5 && <div className='scroll-indicator'></div>}
+          </div>
+        )}
 
         {/* Favorites Icon */}
         {favorites.length > 0 && (
@@ -294,12 +304,20 @@ export default function App() {
                         <span className='product-not-found'>- Not found</span>
                       )}
                     </div>
-                    <button
-                      onClick={() => deleteFromFavorites(index)}
-                      className='delete-button'
-                    >
-                      <Trash2 size={20} />
-                    </button>
+                    <div className='favorites-item-actions'>
+                      <button
+                        onClick={() => addFavoriteToProductList(item)}
+                        className='add-to-list-button'
+                      >
+                        <Plus size={20} />
+                      </button>
+                      <button
+                        onClick={() => deleteFromFavorites(index)}
+                        className='delete-button'
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
                   </li>
                 );
               })}
@@ -319,33 +337,36 @@ export default function App() {
         </button>
 
         {/* History Section */}
-        <div className='history-section'>
-          <div className='history-header'>
-            <h2 className='history-heading'>
-              <History size={20} /> History
-            </h2>
-            <button onClick={clearHistory} className='clear-history-button'>
-              Clear History
-            </button>
+        {history.length > 0 && (
+          <div className='history-section'>
+            <div className='history-header'>
+              <h2 className='history-heading'>
+                <History size={20} /> History
+              </h2>
+              <button onClick={clearHistory} className='clear-history-button'>
+                Clear History
+              </button>
+            </div>
+            <div className='history-scroll-container'>
+              <ul className='history-list'>
+                {history.map((item, index) => (
+                  <li key={index} className='history-item'>
+                    <div>
+                      <span className='history-item-name'>{item.name}</span>
+                    </div>
+                    <button
+                      onClick={() => addFromHistory(item)}
+                      className='add-from-history-button'
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {history.length > 3 && <div className='scroll-indicator'></div>}
+            </div>
           </div>
-          <div className='history-scroll-container'>
-            <ul className='history-list'>
-              {history.map((item, index) => (
-                <li key={index} className='history-item'>
-                  <div>
-                    <span className='history-item-name'>{item.name}</span>
-                  </div>
-                  <button
-                    onClick={() => addFromHistory(item)}
-                    className='add-from-history-button'
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        )}
 
         {/* Snackbar */}
         <Snackbar
