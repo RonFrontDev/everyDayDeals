@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { fetchDeals } from './services/api';
 import { Snackbar, Alert, Modal, Box, Typography } from '@mui/material';
 import {
   Trash2,
@@ -13,6 +12,15 @@ import {
 } from 'lucide-react';
 import './index.css';
 import './styles.css';
+
+// Dummy data for deals
+const dummyData = [
+  { name: 'Milk', store: 'SuperMart', price: 10 },
+  { name: 'Bread', store: 'Bakery Corner', price: 15 },
+  { name: 'Eggs', store: 'FreshFarm', price: 20 },
+  { name: 'Apples', store: 'Fruit Haven', price: 25 },
+  { name: 'Chicken', store: 'Meat Master', price: 50 },
+];
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -35,14 +43,8 @@ export default function App() {
 
   useEffect(() => {
     if (location) {
-      fetchDeals().then((data) => {
-        const filteredDeals = data.filter(
-          (deal) =>
-            getDistance(location.lat, location.lon, deal.lat, deal.lon) <=
-            radius
-        );
-        setDeals(filteredDeals);
-      });
+      // Simulate fetching deals from an API
+      setDeals(dummyData); // Use dummyData instead of an API call
     }
   }, [location, radius]);
 
@@ -211,7 +213,8 @@ export default function App() {
           <div className='product-scroll-container'>
             <ul className='product-list'>
               {products.map((p, index) => {
-                const foundDeal = deals.find((d) => {
+                // Check if the product matches any deal in dummyData
+                const foundDeal = dummyData.find((d) => {
                   const productName = p.name.toLowerCase().trim();
                   const dealName = d.name.toLowerCase().trim();
                   return dealName === productName;
@@ -222,8 +225,7 @@ export default function App() {
                       <span className='product-name'>{p.name}</span>
                       {foundDeal ? (
                         <span className='product-price'>
-                          - Found at {foundDeal.store} for{' '}
-                          {foundDeal.price || 'N/A'} kr
+                          - Found at {foundDeal.store} for {foundDeal.price} kr
                         </span>
                       ) : (
                         <span className='product-not-found'>- Not found</span>
@@ -286,7 +288,7 @@ export default function App() {
             </Typography>
             <ul className='favorites-list'>
               {favorites.map((item, index) => {
-                const foundDeal = deals.find((d) => {
+                const foundDeal = dummyData.find((d) => {
                   const productName = item.name.toLowerCase().trim();
                   const dealName = d.name.toLowerCase().trim();
                   return dealName === productName;
@@ -297,8 +299,7 @@ export default function App() {
                       <span className='product-name'>{item.name}</span>
                       {foundDeal ? (
                         <span className='product-price'>
-                          - Found at {foundDeal.store} for{' '}
-                          {foundDeal.price || 'N/A'} kr
+                          - Found at {foundDeal.store} for {foundDeal.price} kr
                         </span>
                       ) : (
                         <span className='product-not-found'>- Not found</span>
@@ -382,19 +383,4 @@ export default function App() {
       </div>
     </div>
   );
-}
-
-// Distance Calculation Function
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Radius of Earth in km
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
 }
