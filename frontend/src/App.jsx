@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Snackbar, Alert, Modal, Box, Typography } from '@mui/material';
-import {
-  Trash2,
-  History,
-  Lock,
-  Unlock,
-  Heart,
-  HeartOff,
-  ChevronRight,
-  Plus,
-  Loader2,
-} from 'lucide-react';
+import { Heart, Loader2 } from 'lucide-react';
 import './index.css';
 import './styles.css';
 
@@ -19,6 +8,14 @@ import FavoritesPopup from './components/FavoritesPopup';
 import HistorySection from './components/HistorySection';
 import InputFields from './components/InputFields';
 import SnackbarAlert from './components/SnackbarAlert';
+
+const dummyData = [
+  { name: 'Milk', store: 'SuperMart', price: 10 },
+  { name: 'Bread', store: 'Bakery Corner', price: 15 },
+  { name: 'Eggs', store: 'FreshFarm', price: 20 },
+  { name: 'Apples', store: 'Fruit Haven', price: 25 },
+  { name: 'Chicken', store: 'Meat Master', price: 50 },
+];
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -48,6 +45,10 @@ export default function App() {
         .then((data) => {
           setLoadingDeals(false);
           setDeals(data);
+        })
+        .catch(() => {
+          setLoadingDeals(false);
+          setDeals(dummyData);
         });
     }
   }, [location, radius]);
