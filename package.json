@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "build": "cd frontend && npm install && npm run build",
-    "start": "cd backend && npm install && node server.js"
+    "start": "cd backend && npm install && node server.js",
+    "frontend:serve": "cd frontend && npm run dev:serve",
+    "frontend:dev": "cd frontend && npm run dev",
+    "server": "cd backend && node server.js",
+    "dev:api": "concurrently \"npm run server\" \"npm run frontend:serve\"",
+    "dev": "concurrently \"npm run server\" \"npm run frontend:dev\""
   }
 }
