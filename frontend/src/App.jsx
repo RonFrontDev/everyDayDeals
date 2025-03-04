@@ -185,10 +185,11 @@ export default function App() {
 
   return (
     <div className="app-container relative">
-      <div className="loading-spinner-container">
-        {loadingDeals ? <Loader2 size={48} /> : null}
-        <Loader2 size={48} className="loading-spinner" />
-      </div>
+      {loadingDeals ? (
+        <div className="loading-spinner-container">
+          <Loader2 size={48} />
+        </div>
+      ) : null}
 
       <div className="app-content">
         <h1 className="heading">🛒 Every Day Deals</h1>
