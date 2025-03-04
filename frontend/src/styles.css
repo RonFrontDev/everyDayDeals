@@ -342,15 +342,15 @@ body {
 
 .loading-spinner-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .loading-spinner {
+  color: #dc3545;
   animation: spin infinite 1s linear;
 }
 
