@@ -2,6 +2,21 @@
 
 ## First time setup
 
+### Install dependencies
+
+```bash
+# Global
+npm install
+
+# Backend
+cd backend/
+npm install
+
+# Frontend
+cd frontend/
+npm install
+```
+
 ### .env file
 
 Duplicate `.env.example` and name it `.env` (in the root of the project).
@@ -21,27 +36,16 @@ NODE_ENV=testing
 
 ## Every day development
 
-### Start the server
+For development, there are two main ways to run the project.
+
+First is to run the client in API mode, which is useful for developing with real API data:
 
 ```bash
-# cd into the backend folder and run:
-node server.js
+npm run dev:api
 ```
 
-### Start the client
-
-There are two ways to start the client:
-
-First is to serve files like in production, so frontend files run on same environment as the server. This is useful for testing the production build and getting real life fetched data from the live API in use.
+Second is to run the client in development mode, which is useful for developing the frontend (styling and markup/html changes):
 
 ```bash
-# cd into the frontend folder and run:
-npm run dev:serve
-```
-
-Second is to run the client in development mode, which is useful for developing the frontend (styling and markup/html changes).
-
-```bash
-# cd into the frontend folder and run:
 npm run dev
 ```
