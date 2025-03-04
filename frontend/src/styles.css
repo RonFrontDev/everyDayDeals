@@ -335,3 +335,30 @@ body {
 .add-to-list-button:hover {
   color: #218838; /* Darker green on hover */
 }
+
+.relative {
+  position: relative;
+}
+
+.loading-spinner-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner {
+  animation: spin infinite 1s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

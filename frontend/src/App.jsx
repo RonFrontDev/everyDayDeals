@@ -9,6 +9,7 @@ import {
   HeartOff,
   ChevronRight,
   Plus,
+  Loader2,
 } from 'lucide-react';
 import './index.css';
 import './styles.css';
@@ -18,15 +19,6 @@ import FavoritesPopup from './components/FavoritesPopup';
 import HistorySection from './components/HistorySection';
 import InputFields from './components/InputFields';
 import SnackbarAlert from './components/SnackbarAlert';
-
-// Dummy data for deals
-const dummyData = [
-  { name: 'Milk', store: 'SuperMart', price: 10 },
-  { name: 'Bread', store: 'Bakery Corner', price: 15 },
-  { name: 'Eggs', store: 'FreshFarm', price: 20 },
-  { name: 'Apples', store: 'Fruit Haven', price: 25 },
-  { name: 'Chicken', store: 'Meat Master', price: 50 },
-];
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -38,6 +30,7 @@ export default function App() {
   const [history, setHistory] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [isFavoritesPopupOpen, setIsFavoritesPopupOpen] = useState(false);
+  const [loadingDeals, setLoadingDeals] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -49,8 +42,13 @@ export default function App() {
 
   useEffect(() => {
     if (location) {
-      // Simulate fetching deals from an API
-      setDeals(dummyData); // Use dummyData instead of an API call
+      setLoadingDeals(true);
+      fetch('/api/deals')
+        .then((res) => res.json())
+        .then((data) => {
+          setLoadingDeals(false);
+          setDeals(data);
+        });
     }
   }, [location, radius]);
 
@@ -186,9 +184,14 @@ export default function App() {
   };
 
   return (
-    <div className='app-container'>
-      <div className='app-content'>
-        <h1 className='heading'>🛒 Every Day Deals</h1>
+    <div className="app-container relative">
+      <div className="loading-spinner-container">
+        {loadingDeals ? <Loader2 size={48} /> : null}
+        <Loader2 size={48} className="loading-spinner" />
+      </div>
+
+      <div className="app-content">
+        <h1 className="heading">🛒 Every Day Deals</h1>
 
         <InputFields
           radius={radius}
@@ -200,7 +203,7 @@ export default function App() {
 
         <ProductList
           products={products}
-          dummyData={dummyData}
+          dummyData={deals}
           deleteProduct={deleteProduct}
           toggleLock={toggleLock}
           toggleFavorite={toggleFavorite}
@@ -210,10 +213,10 @@ export default function App() {
           <div
             onClick={openFavoritesPopup}
             onDoubleClick={handleDoubleClickFavoritesIcon}
-            className='favorites-icon-button'
+            className="favorites-icon-button"
           >
             <Heart size={24} />
-            <span className='favorites-count'>{favorites.length}</span>
+            <span className="favorites-count">{favorites.length}</span>
           </div>
         )}
 
@@ -221,12 +224,12 @@ export default function App() {
           isFavoritesPopupOpen={isFavoritesPopupOpen}
           closeFavoritesPopup={closeFavoritesPopup}
           favorites={favorites}
-          dummyData={dummyData}
+          dummyData={deals}
           addFavoriteToProductList={addFavoriteToProductList}
           deleteFromFavorites={deleteFromFavorites}
         />
 
-        <button onClick={clearProducts} className='clear-button'>
+        <button onClick={clearProducts} className="clear-button">
           Clear Unlocked Items
         </button>
 
