@@ -9,5 +9,8 @@
     "server": "cd backend && node server.js",
     "dev:api": "concurrently \"npm run server\" \"npm run frontend:serve\"",
     "dev": "concurrently \"npm run server\" \"npm run frontend:dev\""
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
   }
 }
